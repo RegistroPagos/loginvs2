@@ -5,18 +5,6 @@
   <title>Comprobante de Pago</title>
   <link rel="stylesheet" href="/css/comprobante.css">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script>
-        function generarYGuardarImagen() {
-            html2canvas(document.querySelector("#comprobante")).then(canvas => {
-                const base64image = canvas.toDataURL("image/png");
-                if (window.AndroidInterface) {
-                    window.AndroidInterface.guardarImagen(base64image);
-                } else {
-                    alert("No se pudo conectar con la app Android.");
-                }
-            });
-        }
-    </script>
 </head>
 <body>
   <h2>Comprobante de Pago</h2>
@@ -36,6 +24,29 @@
 
   <br>
 
-  <button onclick="generarYGuardarImagen()">Guardar la imagen</button>
+  <button onclick="descargarOCompartir()">Descargar o Compartir</button>
+
+  <script>
+    async function descargarOCompartir() {
+      const area = document.getElementById('comprobante-area');
+
+      // Generar la imagen usando html2canvas
+      const canvas = await html2canvas(area);
+      const dataUrl = canvas.toDataURL('image/png');
+
+      // Verificar si estamos en un entorno Android WebView
+      if (window.AndroidInterface) {
+        // Enviar la imagen al código nativo de Android
+        const base64Image = dataUrl.split(',')[1]; // Extraer la parte base64
+        window.AndroidInterface.shareImage(base64Image);
+      } else {
+        // Si no es Android WebView, ofrecer la descarga
+        const link = document.createElement('a');
+        link.download = 'comprobante_pago.png';
+        link.href = dataUrl;
+        link.click();
+      }
+    }
+  </script>
 </body>
 </html>
