@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Comprobante de Pago</title>
+  <link rel="stylesheet" href="/css/comprobante.css">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <h2>Comprobante de Pago</h2>
+
+  <div id="comprobante-area" style="padding: 20px; border: 1px solid #ccc; background-color: #fff; width: fit-content;">
+    <p><strong>Nombre del Cliente:</strong> <%= pago.nombre_cliente %></p>
+    <p><strong>DNI:</strong> <%= pago.dni_cliente %></p>
+    <p><strong>Monto Pagado:</strong> S/. <%= pago.monto_pagado %></p>
+    <p><strong>Deuda Restante:</strong> S/. <%= pago.monto_deuda %></p>
+    <p><strong>Método de Pago:</strong> <%= pago.comprobante_pago === 'efectivo' ? 'Efectivo' : 'Yape' %></p>
+
+    <% if (pago.comprobante_pago !== 'efectivo') { %>
+      <p><strong>Comprobante:</strong></p>
+      <img src="/uploads/<%= pago.comprobante_pago %>" alt="Comprobante" width="300">
+    <% } %>
+  </div>
+
+  <br>
+
+  <button onclick="descargarComprobante()">Descargar como imagen</button>
+
+  <script>
+    function descargarComprobante() {
+      const area = document.getElementById('comprobante-area');
+
+      html2canvas(area).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'comprobante_pago.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
