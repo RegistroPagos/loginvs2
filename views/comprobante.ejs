@@ -5,6 +5,12 @@
   <title>Comprobante de Pago</title>
   <link rel="stylesheet" href="/css/comprobante.css">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    #comprobante-img {
+      margin-top: 20px;
+      max-width: 100%;
+    }
+  </style>
 </head>
 <body>
   <h2>Comprobante de Pago</h2>
@@ -23,18 +29,20 @@
   </div>
 
   <br>
-
-  <button onclick="descargarComprobante()">Descargar como imagen</button>
+  <button onclick="mostrarImagen()">Ver imagen del comprobante</button>
 
   <script>
-    function descargarComprobante() {
+    function mostrarImagen() {
       const area = document.getElementById('comprobante-area');
 
       html2canvas(area).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'comprobante_pago.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+        const img = document.createElement('img');
+        img.id = 'comprobante-img';
+        img.src = canvas.toDataURL('image/png');
+
+        // Limpia todo el body y muestra solo la imagen
+        document.body.innerHTML = '<h2>Imagen del Comprobante</h2><p>Mantén presionada la imagen para descargar o compartir.</p>';
+        document.body.appendChild(img);
       });
     }
   </script>
