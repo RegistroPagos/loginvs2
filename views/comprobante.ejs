@@ -28,19 +28,18 @@
 
   <script>
     async function descargarOCompartir() {
+      console.log("Botón presionado");
       const area = document.getElementById('comprobante-area');
 
-      // Generar la imagen usando html2canvas
       const canvas = await html2canvas(area);
       const dataUrl = canvas.toDataURL('image/png');
 
-      // Verificar si estamos en un entorno Android WebView
       if (window.AndroidInterface) {
-        // Enviar la imagen al código nativo de Android
-        const base64Image = dataUrl.split(',')[1]; // Extraer la parte base64
+        console.log("AndroidInterface detectado");
+        const base64Image = dataUrl.split(',')[1];
         window.AndroidInterface.shareImage(base64Image);
       } else {
-        // Si no es Android WebView, ofrecer la descarga
+        console.log("AndroidInterface no disponible, descargando imagen");
         const link = document.createElement('a');
         link.download = 'comprobante_pago.png';
         link.href = dataUrl;
