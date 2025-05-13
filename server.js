@@ -5,6 +5,9 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const db = require('./db');
 const multer = require('multer');
+const { DateTime } = require('luxon');
+
+const horaPeru = DateTime.now().setZone('America/Lima').toFormat('yyyy-MM-dd HH:mm:ss');
 const upload = multer({ dest: 'uploads/' }); 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -94,8 +97,8 @@ app.post('/registrar-pago', upload.single('comprobante_pago'), (req, res) => {
   const { id_deuda, monto_pagado, metodo_pago, id_usuario } = req.body;
   const comprobante = metodo_pago === 'yape' && req.file ? req.file.filename : 'efectivo';
 
-  db.query('INSERT INTO pago (id_deuda, id_usuario, monto_pagado, comprobante_pago) VALUES (?, ?, ?, ?)',
-    [id_deuda, id_usuario, monto_pagado, comprobante], (err, result) => {
+  db.query('INSERT INTO pago (id_deuda, id_usuario, monto_pagado, fecha_pago,comprobante_pago) VALUES (?, ?, ?, ?, ?)',
+    [id_deuda, id_usuario, monto_pagado, horaPeru, comprobante], (err, result) => {
       if (err) throw err;
 
       // luego actualiza la deuda

@@ -5,6 +5,18 @@
   <title>Comprobante de Pago</title>
   <link rel="stylesheet" href="/css/comprobante.css">
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+        function generarYGuardarImagen() {
+            html2canvas(document.querySelector("#comprobante")).then(canvas => {
+                const base64image = canvas.toDataURL("image/png");
+                if (window.AndroidInterface) {
+                    window.AndroidInterface.guardarImagen(base64image);
+                } else {
+                    alert("No se pudo conectar con la app Android.");
+                }
+            });
+        }
+    </script>
 </head>
 <body>
   <h2>Comprobante de Pago</h2>
@@ -24,19 +36,6 @@
 
   <br>
 
-  <button onclick="descargarComprobante()">Descargar como imagen</button>
-
-  <script>
-    function descargarComprobante() {
-      const area = document.getElementById('comprobante-area');
-
-      html2canvas(area).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'comprobante_pago.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      });
-    }
-  </script>
+  <button onclick="generarYGuardarImagen()">Guardar imagen</button>
 </body>
 </html>
