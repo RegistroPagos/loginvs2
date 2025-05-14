@@ -7,7 +7,9 @@ const db = require('./db');
 const multer = require('multer');
 const { DateTime } = require('luxon');
 
-const horaPeru = DateTime.now().setZone('America/Lima').toFormat('yyyy-MM-dd HH:mm:ss');
+const horaPeru = DateTime.now()
+  .setZone('America/Lima')
+  .toFormat("yyyy-MM-dd HH:mm:ss");
 const upload = multer({ dest: 'uploads/' });
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -119,7 +121,7 @@ app.get('/historial', (req, res) => {
         return res.status(500).send('Error al recuperar los pagos');
       }
       // Pasa los resultados a la vista
-      res.render('historial', { pagos: resultados });
+      res.render('historial', { pagos: resultados,DateTime });
     });
   } else {
     res.redirect('/');

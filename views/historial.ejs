@@ -34,7 +34,7 @@
                             <td data-label="Monto Pagado">S/. <%= Number(pago.monto_pagado).toFixed(2) %>
                             </td>
                             <td data-label="Fecha">
-                                <%= new Date(pago.fecha_pago).toLocaleString() %>
+                                <%= DateTime.fromJSDate(pago.fecha_pago).toFormat('dd/MM/yyyy hh:mm') %>
                             </td>
                         </tr>
                         <% }); %>
