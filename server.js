@@ -99,9 +99,14 @@ app.post('/registrar-cliente', (req, res) => {
   );
 });
 
+const { DateTime } = require('luxon');
+
 app.get('/historial', (req, res) => {
   if (req.session.user?.tipo_usuario === 'trabajador') {
-    const idUsuario = req.session.user.id_usuario; // Obtén el ID del usuario en sesión
+    const idUsuario = req.session.user.id_usuario;
+
+    // Obtener el inicio del día anterior en la zona horaria de Perú
+    const ayer = DateTime.now().setZone('America/Lima').minus({ days: 1 }).startOf('day').toFormat('yyyy-MM-dd HH:mm:ss');
 
     db.query(`
       SELECT 
@@ -113,20 +118,22 @@ app.get('/historial', (req, res) => {
       JOIN deuda ON pago.id_deuda = deuda.id_deuda
       JOIN cliente ON deuda.id_cliente = cliente.id_cliente
       JOIN usuario ON pago.id_usuario = usuario.id_usuario
-      WHERE pago.id_usuario = ? -- Filtra por el ID del usuario en sesión
+      WHERE pago.id_usuario = ? 
+        AND pago.fecha_pago >= ?
       ORDER BY pago.fecha_pago DESC
-    `, [idUsuario], (err, resultados) => {
+    `, [idUsuario, ayer], (err, resultados) => {
       if (err) {
         console.error('Error al recuperar los pagos:', err);
         return res.status(500).send('Error al recuperar los pagos');
       }
-      // Pasa los resultados a la vista
-      res.render('historial', { pagos: resultados,DateTime });
+
+      res.render('historial', { pagos: resultados, DateTime });
     });
   } else {
     res.redirect('/');
   }
 });
+
 
 app.get('/api/cliente', (req, res) => {
   const dni = req.query.dni;
