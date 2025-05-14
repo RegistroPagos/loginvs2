@@ -99,8 +99,6 @@ app.post('/registrar-cliente', (req, res) => {
   );
 });
 
-const { DateTime } = require('luxon');
-
 app.get('/historial', (req, res) => {
   if (req.session.user?.tipo_usuario === 'trabajador') {
     const idUsuario = req.session.user.id_usuario;
