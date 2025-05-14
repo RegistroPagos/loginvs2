@@ -1,0 +1,147 @@
+body {
+  background-color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  background-color: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  margin-bottom: 100px; /* espacio para el bottom nav */
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #0f172a;
+  font-size: 24px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: transparent;
+}
+
+thead tr {
+  background-color: #1e3a8a;
+  color: white;
+  border-radius: 8px;
+}
+
+thead th {
+  padding: 14px;
+  text-align: left;
+  font-size: 14px;
+}
+
+tbody tr {
+  background-color: #ffffff;
+}
+
+tbody td {
+  padding: 14px 12px;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+/* Línea horizontal azul entre filas */
+tbody tr + tr {
+  border-top: 4px solid #3b82f6;
+}
+
+/* No mostrar bordes verticales */
+table, th, td {
+  border: none;
+}
+
+/* Fila de mensaje vacío */
+td[colspan="4"] {
+  text-align: center;
+  font-style: italic;
+  color: #64748b;
+  padding: 20px;
+}
+
+/* Hover */
+tbody tr:hover {
+  background-color: #f1f5ff;
+}
+
+/* Bottom nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  z-index: 10;
+}
+
+.nav-item {
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.nav-item.active {
+  color: #1e3a8a;
+  font-weight: bold;
+}
+
+/* Responsive estilo tarjeta en móviles */
+@media (max-width: 600px) {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    margin-bottom: 16px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #3b82f6;
+  }
+
+  tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid #e0e7ff;
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #1e3a8a;
+  }
+
+  tbody td:last-child {
+    border-bottom: none;
+  }
+}

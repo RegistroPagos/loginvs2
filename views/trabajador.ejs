@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Registrar Pago</title>
@@ -32,12 +33,47 @@
       document.getElementById('comprobante_div').style.display = metodo === 'yape' ? 'block' : 'none';
     }
   </script>
-</head>
-<body>
-  <h2>Bienvenido Trabajador: <%= user.nombre_usuario %></h2>
+  <script>
+    async function enviarPago(event) {
+      event.preventDefault();
 
-  <h3>Registrar Pago</h3>
-  <form action="/registrar-pago" method="POST" enctype="multipart/form-data">
+      const form = document.getElementById('form_pago');
+      const formData = new FormData(form);
+      const mensajeDiv = document.getElementById('mensaje');
+      const monto = parseFloat(formData.get('monto_pagado'));
+      if (isNaN(monto) || monto <= 0) {
+        mensajeDiv.textContent = 'El monto debe ser mayor a 0';
+        mensajeDiv.style.color = 'red';
+        return;
+      }
+
+
+      const response = await fetch('/registrar-pago', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.text();
+
+      // si empieza con 'OK:', fue exitoso
+      if (result.startsWith('OK:')) {
+        const id_pago = result.replace('OK:', '').trim();
+        window.location.href = `/comprobante?id_pago=${id_pago}`;
+      } else {
+        mensajeDiv.textContent = result;
+        mensajeDiv.style.color = 'red';
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h2>Bienvenido: <%= user.nombre_usuario %>
+  </h2>
+
+  
+  <form id="form_pago" enctype="multipart/form-data" onsubmit="enviarPago(event)">
+    <h2>Registrar Pago</h2>
     <label for="dni_cliente">DNI del Cliente:</label>
     <input type="text" id="dni_cliente" name="dni_cliente" required>
     <button type="button" onclick="buscarCliente()">Buscar</button>
@@ -48,6 +84,8 @@
 
     <label for="monto_pagado">Monto a pagar (S/.):</label>
     <input type="number" step="0.01" name="monto_pagado" required>
+    <div id="mensaje" style="margin-top: 10px; color: red;"></div>
+
 
     <label for="metodo_pago">Método de Pago:</label>
     <select name="metodo_pago" id="metodo_pago" onchange="toggleComprobante()" required>
@@ -63,5 +101,8 @@
     <input type="hidden" name="id_usuario" value="<%= user.id_usuario %>">
     <button type="submit">Registrar Pago</button>
   </form>
+  <%- include('partials/bottom-nav', { active: 'pago' }) %>
+
 </body>
+
 </html>
